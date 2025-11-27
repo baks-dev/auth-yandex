@@ -26,7 +26,7 @@ declare(strict_types=1);
 
 namespace BaksDev\Auth\Yandex\Controller\Admin;
 
-use BaksDev\Auth\Yandex\Repository\DBAL\AllAccountYandex\AllAccountYandexInterface;
+use BaksDev\Auth\Yandex\Repository\AllAccountYandex\AllAccountYandexInterface;
 use BaksDev\Core\Controller\AbstractController;
 use BaksDev\Core\Form\Search\SearchDTO;
 use BaksDev\Core\Form\Search\SearchForm;

@@ -26,7 +26,7 @@ namespace BaksDev\Auth\Yandex\UseCase\Admin\Edit;
 
 use BaksDev\Auth\Yandex\Entity\Event\AccountYandexEventInterface;
 use BaksDev\Auth\Yandex\Type\Event\AccountYandexEventUid;
-use BaksDev\Auth\Yandex\UseCase\Admin\Edit\Status\AccountYandexStatusDTO;
+use BaksDev\Auth\Yandex\UseCase\Admin\Edit\Active\AccountYandexActiveDTO;
 use BaksDev\Users\User\Type\Id\UserUid;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -52,7 +52,7 @@ final class EditAccountYandexDTO implements AccountYandexEventInterface
      * Идентификатор пользователя в Yandex
      */
     #[Assert\Valid]
-    private AccountYandexStatusDTO $status;
+    private AccountYandexActiveDTO $active;
 
     public function __construct(AccountYandexEventUid $id)
     {
@@ -78,15 +78,15 @@ final class EditAccountYandexDTO implements AccountYandexEventInterface
     /**
      * Статус аккаунта
      */
-    public function setStatus(AccountYandexStatusDTO $status): EditAccountYandexDTO
+    public function setActive(AccountYandexActiveDTO $active): EditAccountYandexDTO
     {
-        $this->status = $status;
+        $this->active = $active;
         return $this;
     }
 
-    public function getStatus(): AccountYandexStatusDTO
+    public function getActive(): AccountYandexActiveDTO
     {
-        return $this->status;
+        return $this->active;
     }
 
 }

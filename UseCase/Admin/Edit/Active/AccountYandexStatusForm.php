@@ -1,17 +1,17 @@
 <?php
 /*
  *  Copyright 2025.  Baks.dev <admin@baks.dev>
- *  
+ *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
  *  in the Software without restriction, including without limitation the rights
  *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  *  copies of the Software, and to permit persons to whom the Software is furnished
  *  to do so, subject to the following conditions:
- *  
+ *
  *  The above copyright notice and this permission notice shall be included in all
  *  copies or substantial portions of the Software.
- *  
+ *
  *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  *  FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE
@@ -24,50 +24,26 @@
 
 declare(strict_types=1);
 
-namespace BaksDev\Auth\Yandex\Repository\DBAL\AllAccountYandex;
+namespace BaksDev\Auth\Yandex\UseCase\Admin\Edit\Active;
 
-use BaksDev\Auth\Yandex\Type\Event\AccountYandexEventUid;
-use BaksDev\Users\User\Type\Id\UserUid;
-use DateTimeImmutable;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
-final readonly class AllAccountYandexResult
+final class AccountYandexStatusForm extends AbstractType
 {
-    public function __construct(
-        private string $id,
-        private string $event,
-        private bool $yandex_status,
-        private string $yandex_update,
-        private ?string $users_profile_url,
-        private ?string $users_profile_username,
-    ) {}
-
-    public function getId(): UserUid
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        return new UserUid($this->id);
+        $builder->add('value', CheckboxType::class, ['required' => false]);
     }
 
-    public function getEvent(): AccountYandexEventUid
+    public function configureOptions(OptionsResolver $resolver): void
     {
-        return new AccountYandexEventUid($this->event);
-    }
-
-    public function getYandexStatus(): bool
-    {
-        return true === $this->yandex_status;
-    }
-
-    public function getYandexUpdate(): DateTimeImmutable
-    {
-        return new DateTimeImmutable($this->yandex_update);
-    }
-
-    public function getUsersProfileUrl(): ?string
-    {
-        return $this->users_profile_url;
-    }
-
-    public function getUsersProfileUsername(): ?string
-    {
-        return $this->users_profile_username;
+        $resolver->setDefaults([
+            'data_class' => AccountYandexActiveDTO::class,
+            'method' => 'POST',
+            'attr' => ['class' => 'w-100'],
+        ]);
     }
 }

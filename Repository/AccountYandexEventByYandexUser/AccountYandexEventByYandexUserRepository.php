@@ -24,15 +24,15 @@
 
 declare(strict_types=1);
 
-namespace BaksDev\Auth\Yandex\Repository\ORM\AccountYandexEventByCid;
+namespace BaksDev\Auth\Yandex\Repository\AccountYandexEventByYandexUser;
 
 use BaksDev\Auth\Yandex\Entity\AccountYandex;
 use BaksDev\Auth\Yandex\Entity\Event\AccountYandexEvent;
 use BaksDev\Auth\Yandex\Entity\Event\Invariable\AccountYandexInvariable;
+use BaksDev\Auth\Yandex\Type\YandexUser\AccountYandexUserId;
 use BaksDev\Core\Doctrine\ORMQueryBuilder;
-use Doctrine\DBAL\Types\Types;
 
-final readonly class AccountYandexEventByCidRepository implements AccountYandexEventByCidInterface
+final readonly class AccountYandexEventByYandexUserRepository implements AccountYandexEventByYandexUserInterface
 {
     public function __construct(
         private ORMQueryBuilder $ORMQueryBuilder
@@ -41,37 +41,34 @@ final readonly class AccountYandexEventByCidRepository implements AccountYandexE
     /**
      * Метод возвращает текущее активное событие
      */
-    public function find(string $yid): AccountYandexEvent|false
+    public function find(AccountYandexUserId $AccountYandexUser): AccountYandexEvent|false
     {
         $orm = $this->ORMQueryBuilder->createQueryBuilder(self::class);
 
-        $orm->from(AccountYandex::class, 'main');
-
         $orm
             ->select('event')
-            ->join(
-                AccountYandexEvent::class,
-                'event',
-                'WITH',
-                '
-                    event.id = main.event
-                    '
+            ->from(AccountYandexInvariable::class, 'invariable')
+            ->where('invariable.identifier = :identifier')
+            ->setParameter(
+                key: 'identifier',
+                value: $AccountYandexUser,
+                type: AccountYandexUserId::TYPE
             );
 
         $orm
             ->join(
-                AccountYandexInvariable::class,
-                'invariable',
+                AccountYandex::class,
+                'main',
                 'WITH',
-                '
-                    invariable.event = main.event AND
-                    invariable.yid = :yid
-                    '
-            )
-            ->setParameter(
-                key: 'yid',
-                value: $yid,
-                type: Types::STRING
+                'main.id = invariable.main'
+            );
+
+        $orm
+            ->join(
+                AccountYandexEvent::class,
+                'event',
+                'WITH',
+                'event.id = invariable.event'
             );
 
         return $orm->getOneOrNullResult() ?: false;

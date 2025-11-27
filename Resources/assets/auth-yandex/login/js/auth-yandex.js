@@ -29,6 +29,25 @@ executeFunc(function authYandex()
         return false;
     }
 
+    const yandexUrl = new URL(authLink.href);
+
+    /** Если ссылка не отрисовалась */
+    if(yandexUrl.origin + yandexUrl.pathname !== 'https://oauth.yandex.ru/authorize')
+    {
+        authLink.addEventListener('click', function(event)
+        {
+            event.preventDefault(); // отменяем обычный переход
+
+            let $successSupplyToast = "{ \"type\":\"danger\" , " +
+                "\"header\":\"Аутентификация Яндекс\"  , " +
+                "\"message\" : \"Аутентификация с помощью Яндекс ID временно не доступна\" }";
+
+            createToast(JSON.parse($successSupplyToast));
+        });
+
+        return true;
+    }
+
     authLink.addEventListener('click', function(event)
     {
         /** Закрываем модальное окно */

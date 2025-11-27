@@ -28,16 +28,16 @@ declare(strict_types=1);
 namespace BaksDev\Auth\Yandex\Entity\Event\Invariable;
 
 use BaksDev\Auth\Yandex\Entity\Event\AccountYandexEvent;
+use BaksDev\Auth\Yandex\Type\YandexUser\AccountYandexUserId;
 use BaksDev\Core\Entity\EntityReadonly;
 use BaksDev\Users\User\Type\Id\UserUid;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use InvalidArgumentException;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'account_yandex_invariable')]
-#[ORM\UniqueConstraint(columns: ['yid'])]
+#[ORM\UniqueConstraint(columns: ['identifier'])]
 class AccountYandexInvariable extends EntityReadonly
 {
     /**
@@ -61,8 +61,8 @@ class AccountYandexInvariable extends EntityReadonly
     /**
      * Идентификатор пользователя в Yandex
      */
-    #[ORM\Column(type: Types::STRING, nullable: false)]
-    private readonly string $yid;
+    #[ORM\Column(type: AccountYandexUserId::TYPE, nullable: false)]
+    private AccountYandexUserId $identifier;
 
     public function __construct(AccountYandexEvent $event)
     {
@@ -97,8 +97,8 @@ class AccountYandexInvariable extends EntityReadonly
             'Class %s interface error in %s', $dto::class, self::class.':'.__LINE__));
     }
 
-    public function getYid(): string
+    public function getIdentifier(): AccountYandexUserId
     {
-        return $this->yid;
+        return $this->identifier;
     }
 }

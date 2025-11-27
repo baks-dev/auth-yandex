@@ -29,7 +29,7 @@ namespace BaksDev\Auth\Yandex\Entity\Event;
 use BaksDev\Auth\Yandex\Entity\AccountYandex;
 use BaksDev\Auth\Yandex\Entity\Event\Invariable\AccountYandexInvariable;
 use BaksDev\Auth\Yandex\Entity\Event\Modify\AccountYandexModify;
-use BaksDev\Auth\Yandex\Entity\Event\Status\AccountYandexStatus;
+use BaksDev\Auth\Yandex\Entity\Event\Status\AccountYandexActive;
 use BaksDev\Auth\Yandex\Type\Event\AccountYandexEventUid;
 use BaksDev\Core\Entity\EntityEvent;
 use BaksDev\Users\User\Type\Id\UserUid;
@@ -67,8 +67,8 @@ class AccountYandexEvent extends EntityEvent
     /**
      * Статус аккаунта
      */
-    #[ORM\OneToOne(targetEntity: AccountYandexStatus::class, mappedBy: 'event', cascade: ['all'], fetch: 'EAGER')]
-    private AccountYandexStatus $status;
+    #[ORM\OneToOne(targetEntity: AccountYandexActive::class, mappedBy: 'event', cascade: ['all'], fetch: 'EAGER')]
+    private AccountYandexActive $active;
 
     /**
      * Модификатор
@@ -139,9 +139,9 @@ class AccountYandexEvent extends EntityEvent
         throw new InvalidArgumentException(sprintf('Class %s interface error', $dto::class));
     }
 
-    public function getStatus(): AccountYandexStatus
+    public function getActive(): AccountYandexActive
     {
-        return $this->status;
+        return $this->active;
     }
 
     public function getInvariable(): AccountYandexInvariable

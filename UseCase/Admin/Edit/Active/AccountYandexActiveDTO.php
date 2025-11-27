@@ -22,25 +22,26 @@
  *
  */
 
-namespace BaksDev\Auth\Yandex\Repository\DBAL\ExistAccountYandexByYid\Tests;
+declare(strict_types=1);
 
-use BaksDev\Auth\Yandex\Repository\DBAL\ExistAccountYandexByYid\ExistAccountYandexByYidInterface;
-use PHPUnit\Framework\Attributes\Group;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\DependencyInjection\Attribute\When;
+namespace BaksDev\Auth\Yandex\UseCase\Admin\Edit\Active;
 
-#[Group('auth-yandex')]
-#[When(env: 'test')]
-class ExistAccountYandexByYidRepositoryTest extends KernelTestCase
+use BaksDev\Auth\Yandex\Entity\Event\Status\AccountYandexActiveInterface;
+
+/** @see AccountYandexActive */
+final class AccountYandexActiveDTO implements AccountYandexActiveInterface
 {
-    public function testRepository(): void
+    /** Значение свойства */
+    private bool $value;
+
+    public function getValue(): bool
     {
-        self::assertTrue(true);
-        return;
+        return $this->value;
+    }
 
-        /** @var ExistAccountYandexByYidInterface $ExistAccountYandexInterface */
-        $ExistAccountYandexInterface = self::getContainer()->get(ExistAccountYandexByYidInterface::class);
-
-        $result = $ExistAccountYandexInterface->isExist('');
+    public function setValue(bool $value): self
+    {
+        $this->value = $value;
+        return $this;
     }
 }

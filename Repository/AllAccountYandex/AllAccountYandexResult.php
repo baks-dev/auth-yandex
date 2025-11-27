@@ -22,25 +22,52 @@
  *
  */
 
-namespace BaksDev\Auth\Yandex\Repository\DBAL\AllAccountYandex\Tests;
+declare(strict_types=1);
 
-use BaksDev\Auth\Yandex\Repository\DBAL\AllAccountYandex\AllAccountYandexInterface;
-use PHPUnit\Framework\Attributes\Group;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\DependencyInjection\Attribute\When;
+namespace BaksDev\Auth\Yandex\Repository\AllAccountYandex;
 
-#[Group('auth-yandex')]
-#[When(env: 'test')]
-class AllAccountYandexRepositoryTest extends KernelTestCase
+use BaksDev\Auth\Yandex\Type\Event\AccountYandexEventUid;
+use BaksDev\Users\User\Type\Id\UserUid;
+use DateTimeImmutable;
+
+final readonly class AllAccountYandexResult
 {
-    public function testRepository(): void
+    public function __construct(
+        private string $id,
+        private string $event,
+        private bool $yandex_status,
+        private string $yandex_update,
+        private ?string $users_profile_url,
+        private ?string $users_profile_username,
+    ) {}
+
+    public function getId(): UserUid
     {
-        self::assertTrue(true);
+        return new UserUid($this->id);
+    }
 
-        /** @var AllAccountYandexInterface $AllAccountYandexInterface */
-        $AllAccountYandexInterface = self::getContainer()->get(AllAccountYandexInterface::class);
+    public function getEvent(): AccountYandexEventUid
+    {
+        return new AccountYandexEventUid($this->event);
+    }
 
-        $result = $AllAccountYandexInterface->findAll();
+    public function getYandexStatus(): bool
+    {
+        return true === $this->yandex_status;
+    }
 
+    public function getYandexUpdate(): DateTimeImmutable
+    {
+        return new DateTimeImmutable($this->yandex_update);
+    }
+
+    public function getUsersProfileUrl(): ?string
+    {
+        return $this->users_profile_url;
+    }
+
+    public function getUsersProfileUsername(): ?string
+    {
+        return $this->users_profile_username;
     }
 }

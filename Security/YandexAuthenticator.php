@@ -35,7 +35,7 @@ use BaksDev\Auth\Yandex\Api\PersonalInfo\YandexPersonalInfoRequest;
 use BaksDev\Auth\Yandex\Entity\AccountYandex;
 use BaksDev\Auth\Yandex\Entity\Event\AccountYandexEvent;
 use BaksDev\Auth\Yandex\Messenger\CreateUserProfileDispatcher\CreateUserProfileMessage;
-use BaksDev\Auth\Yandex\Repository\ORM\AccountYandexEventByCid\AccountYandexEventByCidInterface;
+use BaksDev\Auth\Yandex\Repository\AccountYandexEventByYandexUser\AccountYandexEventByYandexUserInterface;
 use BaksDev\Auth\Yandex\UseCase\Public\New\Invariable\AccountYandexInvariableDTO;
 use BaksDev\Auth\Yandex\UseCase\Public\New\NewAccountYandexDTO;
 use BaksDev\Auth\Yandex\UseCase\Public\New\NewAccountYandexHandler;
@@ -64,7 +64,7 @@ final class YandexAuthenticator extends AbstractAuthenticator
         private readonly UrlGeneratorInterface $urlGenerator,
         protected readonly MessageDispatchInterface $messageDispatch,
         private readonly GetUserByIdInterface $userByIdRepository,
-        private readonly AccountYandexEventByCidInterface $accountYandexEventByCidRepository,
+        private readonly AccountYandexEventByYandexUserInterface $accountYandexEventByCidRepository,
         private readonly NewAccountYandexHandler $newAccountYandexHandler,
         private readonly YandexOAuthTokenRequest $yandexAuthTokenRequest,
         private readonly YandexPersonalInfoRequest $yandexPersonalInfoRequest,
@@ -124,7 +124,7 @@ final class YandexAuthenticator extends AbstractAuthenticator
         }
 
         /** Уникальный идентификатор пользователя в Яндекс */
-        $yandexUserId = $YandexPersonalInfoDTO->getId();
+        $yandexUserId = $YandexPersonalInfoDTO->getUserId();
 
         return new SelfValidatingPassport(
             new UserBadge('auth-yandex-'.$yandexUserId, function()
@@ -139,7 +139,7 @@ final class YandexAuthenticator extends AbstractAuthenticator
                 /** Если аккаунт создан НО НЕ АКТИВНЫЙ в нашем приложении */
                 if(
                     true === $accountYandexEvent instanceof AccountYandexEvent &&
-                    true === $accountYandexEvent->getStatus()->isInactive()
+                    true === $accountYandexEvent->getActive()->isInactive()
                 )
                 {
                     $this->logger->warning(
@@ -147,7 +147,7 @@ final class YandexAuthenticator extends AbstractAuthenticator
                         context: [
                             self::class.':'.__LINE__,
                             $accountYandexEvent->getAccount(),
-                            'Yid' => $accountYandexEvent->getInvariable()->getYid(),
+                            'Yid' => $accountYandexEvent->getInvariable()->getIdentifier(),
                         ]
                     );
 
@@ -167,7 +167,7 @@ final class YandexAuthenticator extends AbstractAuthenticator
 
                     /** Invariable */
                     $AccountYandexInvariableDTO = new AccountYandexInvariableDTO();
-                    $AccountYandexInvariableDTO->setYid($yandexUserId);
+                    $AccountYandexInvariableDTO->setIdentifier($yandexUserId);
                     $NewAccountYandexDTO->setInvariable($AccountYandexInvariableDTO);
 
                     $AccountYandex = $this->newAccountYandexHandler->handle($NewAccountYandexDTO);

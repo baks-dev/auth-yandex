@@ -13,9 +13,30 @@
         </div>
 
         <div class="modal-body">
-            <div class="w-50">
-                {{ form_row(form.status, {label: 'Статус аккаутна'}) }}
+
+            <div class="d-flex justify-content-around pb-3 radio-buttons clearfix w-50" data-buttons="true"
+                    {#                 style='clear: both' #}
+            >
+                <label class="btn p-3 border-dotted rounded-3 w-100 {{ form.active.vars.data ? 'active' }}">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-grow-1">
+                            <span class="h5">
+                                <div class="form-check d-flex align-items-center">
+                                    {{ form_widget(form.active.value, {label: false}) }}
+                                    <div class="h6 mb-0">
+                                        Аккаунт активен
+                                    </div>
+                                </div>
+                            </span>
+
+                        </div>
+                    </div>
+                </label>
             </div>
+
+            {#            <div class="w-50"> #}
+            {#                {{ form_row(form.active, {label: 'Статус аккаутна'}) }} #}
+            {#            </div> #}
         </div>
 
         <div class="modal-footer ">

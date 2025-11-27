@@ -26,8 +26,8 @@ namespace BaksDev\Auth\Yandex\UseCase\Public\New;
 
 use BaksDev\Auth\Yandex\Entity\Event\AccountYandexEventInterface;
 use BaksDev\Auth\Yandex\Type\Event\AccountYandexEventUid;
+use BaksDev\Auth\Yandex\UseCase\Public\New\Active\AccountYandexActiveDTO;
 use BaksDev\Auth\Yandex\UseCase\Public\New\Invariable\AccountYandexInvariableDTO;
-use BaksDev\Auth\Yandex\UseCase\Public\New\Status\AccountYandexStatusDTO;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -52,10 +52,11 @@ final class NewAccountYandexDTO implements AccountYandexEventInterface
      * Статус аккаунта
      */
     #[Assert\Valid]
-    private AccountYandexStatusDTO $status;
+    private AccountYandexActiveDTO $active;
 
-    public function __construct() {
-        $this->status = new AccountYandexStatusDTO();
+    public function __construct()
+    {
+        $this->active = new AccountYandexActiveDTO();
     }
 
     /**
@@ -83,14 +84,14 @@ final class NewAccountYandexDTO implements AccountYandexEventInterface
     /**
      * Статус аккаунта
      */
-    public function setStatus(AccountYandexStatusDTO $status): NewAccountYandexDTO
+    public function setActive(AccountYandexActiveDTO $active): NewAccountYandexDTO
     {
-        $this->status = $status;
+        $this->active = $active;
         return $this;
     }
 
-    public function getStatus(): AccountYandexStatusDTO
+    public function getActive(): AccountYandexActiveDTO
     {
-        return $this->status;
+        return $this->active;
     }
 }

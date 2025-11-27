@@ -1,17 +1,17 @@
 <?php
 /*
  *  Copyright 2025.  Baks.dev <admin@baks.dev>
- *  
+ *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
  *  in the Software without restriction, including without limitation the rights
  *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  *  copies of the Software, and to permit persons to whom the Software is furnished
  *  to do so, subject to the following conditions:
- *  
+ *
  *  The above copyright notice and this permission notice shall be included in all
  *  copies or substantial portions of the Software.
- *  
+ *
  *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  *  FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE
@@ -22,31 +22,13 @@
  *
  */
 
-declare(strict_types=1);
+namespace BaksDev\Auth\Yandex\Entity\Event\Status;
 
-namespace BaksDev\Auth\Yandex\UseCase\Public\New\Invariable;
-
-use BaksDev\Auth\Yandex\Entity\Event\Invariable\AccountYandexInvariableInterface;
-use BaksDev\Auth\Yandex\Type\YandexUser\AccountYandexUserId;
-use Symfony\Component\Validator\Constraints as Assert;
-
-/** @see AccountYandexInvariable */
-final class AccountYandexInvariableDTO implements AccountYandexInvariableInterface
+interface AccountYandexActiveInterface
 {
     /**
-     * Идентификатор пользователя в Yandex
+     * Значение свойства
+     * @see AccountYandexActive
      */
-    #[Assert\NotBlank]
-    private AccountYandexUserId $identifier;
-
-    public function getIdentifier(): AccountYandexUserId
-    {
-        return $this->identifier;
-    }
-
-    public function setIdentifier(AccountYandexUserId $identifier): self
-    {
-        $this->identifier = $identifier;
-        return $this;
-    }
+    public function getValue(): bool;
 }

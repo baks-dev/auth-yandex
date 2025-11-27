@@ -28,6 +28,7 @@ namespace BaksDev\Auth\Yandex\UseCase\Public\New\Tests;
 
 use BaksDev\Auth\Yandex\Entity\AccountYandex;
 use BaksDev\Auth\Yandex\Entity\Event\AccountYandexEvent;
+use BaksDev\Auth\Yandex\Type\YandexUser\AccountYandexUserId;
 use BaksDev\Auth\Yandex\UseCase\Public\New\Invariable\AccountYandexInvariableDTO;
 use BaksDev\Auth\Yandex\UseCase\Public\New\NewAccountYandexDTO;
 use BaksDev\Auth\Yandex\UseCase\Public\New\NewAccountYandexHandler;
@@ -66,7 +67,6 @@ class NewAccountYandexHandlerTest extends KernelTestCase
 
         $User = $em->getReference(User::class, new UserUid(UserUid::TEST));
 
-
         if($User instanceof User)
         {
             $em->remove($User);
@@ -81,13 +81,13 @@ class NewAccountYandexHandlerTest extends KernelTestCase
 
         /** Invariable */
         $AccountYandexInvariableDTO = new AccountYandexInvariableDTO();
-        $AccountYandexInvariableDTO->setYid('bnynw6dht8d7c5m2r0qgjqba6m');
+        $AccountYandexInvariableDTO->setIdentifier(new AccountYandexUserId('bnynw6dht8d7c5m2r0qgjqba6m'));
         $NewAccountYandexDTO->setInvariable($AccountYandexInvariableDTO);
 
         /** @var NewAccountYandexHandler $NewAccountYandexHandler */
         $NewAccountYandexHandler = self::getContainer()->get(NewAccountYandexHandler::class);
-        $handle = $NewAccountYandexHandler->handle($NewAccountYandexDTO);
+        $AccountYandex = $NewAccountYandexHandler->handle($NewAccountYandexDTO);
 
-        self::assertTrue(($handle instanceof AccountYandex), $handle.': Ошибка AccountYandex');
+        self::assertTrue(($AccountYandex instanceof AccountYandex), $AccountYandex.': Ошибка AccountYandex');
     }
 }

@@ -22,14 +22,35 @@
  *
  */
 
-declare(strict_types=1);
+namespace BaksDev\Auth\Yandex\Type\YandexUser;
 
-namespace BaksDev\Auth\Yandex\Repository\DBAL\AllAccountYandex;
+use Doctrine\DBAL\Platforms\AbstractPlatform;
+use Doctrine\DBAL\Types\Type;
 
-use BaksDev\Core\Services\Paginator\PaginatorInterface;
-
-interface AllAccountYandexInterface
+final class AccountYandexUserIdType extends Type
 {
-    /** Метод возвращает пагинатор AccountYandex */
-    public function findAll(): PaginatorInterface;
+    public function convertToDatabaseValue($value, AbstractPlatform $platform): string
+    {
+        return (string) $value;
+    }
+
+    public function convertToPHPValue($value, AbstractPlatform $platform): ?AccountYandexUserId
+    {
+        return !empty($value) ? new AccountYandexUserId($value) : null;
+    }
+
+    public function getName(): string
+    {
+        return AccountYandexUserId::TYPE;
+    }
+
+    public function requiresSQLCommentHint(AbstractPlatform $platform): bool
+    {
+        return true;
+    }
+
+    public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
+    {
+        return $platform->getStringTypeDeclarationSQL($column);
+    }
 }

@@ -28,9 +28,9 @@ namespace BaksDev\Auth\Yandex\UseCase\Admin\Edit\Tests;
 
 use BaksDev\Auth\Yandex\Entity\AccountYandex;
 use BaksDev\Auth\Yandex\Entity\Event\AccountYandexEvent;
+use BaksDev\Auth\Yandex\UseCase\Admin\Edit\Active\AccountYandexActiveDTO;
 use BaksDev\Auth\Yandex\UseCase\Admin\Edit\EditAccountYandexDTO;
 use BaksDev\Auth\Yandex\UseCase\Admin\Edit\EditAccountYandexHandler;
-use BaksDev\Auth\Yandex\UseCase\Admin\Edit\Status\AccountYandexStatusDTO;
 use BaksDev\Auth\Yandex\UseCase\Public\New\Tests\NewAccountYandexHandlerTest;
 use BaksDev\Users\User\Type\Id\UserUid;
 use Doctrine\ORM\EntityManagerInterface;
@@ -60,9 +60,9 @@ class EditAccountYandexHandlerTest extends KernelTestCase
         $AccountYandexEvent->getDto($EditAccountYandexDTO);
 
         /** Изменяем статус */
-        $AccountYandexStatusDTO = new AccountYandexStatusDTO();
+        $AccountYandexStatusDTO = new AccountYandexActiveDTO();
         $AccountYandexStatusDTO->setValue(false);
-        $EditAccountYandexDTO->setStatus($AccountYandexStatusDTO);
+        $EditAccountYandexDTO->setActive($AccountYandexStatusDTO);
 
         /** @var EditAccountYandexHandler $EditAccountYandexHandler */
         $EditAccountYandexHandler = self::getContainer()->get(EditAccountYandexHandler::class);

@@ -19,6 +19,7 @@
  *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *  THE SOFTWARE.
+ *
  */
 
 declare(strict_types=1);
@@ -33,16 +34,16 @@ use InvalidArgumentException;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
-#[ORM\Table(name: 'account_yandex_status')]
+#[ORM\Table(name: 'account_yandex_active')]
 #[ORM\Index(columns: ['value'])]
-class AccountYandexStatus extends EntityEvent
+class AccountYandexActive extends EntityEvent
 {
     /**
      * Связь на событие
      */
     #[Assert\NotBlank]
     #[ORM\Id]
-    #[ORM\OneToOne(targetEntity: AccountYandexEvent::class, inversedBy: 'status')]
+    #[ORM\OneToOne(targetEntity: AccountYandexEvent::class, inversedBy: 'active')]
     #[ORM\JoinColumn(name: 'event', referencedColumnName: 'id')]
     private AccountYandexEvent $event;
 
@@ -69,7 +70,7 @@ class AccountYandexStatus extends EntityEvent
             $dto = new $dto();
         }
 
-        if($dto instanceof AccountYandexStatusInterface)
+        if($dto instanceof AccountYandexActiveInterface)
         {
             return parent::getDto($dto);
         }
@@ -79,7 +80,7 @@ class AccountYandexStatus extends EntityEvent
 
     public function setEntity($dto): mixed
     {
-        if($dto instanceof AccountYandexStatusInterface)
+        if($dto instanceof AccountYandexActiveInterface)
         {
             return parent::setEntity($dto);
         }

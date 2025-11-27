@@ -24,15 +24,15 @@
 
 declare(strict_types=1);
 
-namespace BaksDev\Auth\Yandex\UseCase\Admin\Edit\Status;
+namespace BaksDev\Auth\Yandex\UseCase\Public\New\Active;
 
-use BaksDev\Auth\Yandex\Entity\Event\Status\AccountYandexStatusInterface;
+use BaksDev\Auth\Yandex\Entity\Event\Status\AccountYandexActiveInterface;
 
-/** @see AccountYandexStatus */
-final class AccountYandexStatusDTO implements AccountYandexStatusInterface
+/** @see AccountYandexActive */
+final class AccountYandexActiveDTO implements AccountYandexActiveInterface
 {
     /** Значение свойства */
-    private bool $value;
+    private bool $value = true;
 
     public function getValue(): bool
     {

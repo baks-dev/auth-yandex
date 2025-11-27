@@ -24,13 +24,13 @@
 
 declare(strict_types=1);
 
-namespace BaksDev\Auth\Yandex\Repository\DBAL\AllAccountYandex;
+namespace BaksDev\Auth\Yandex\Repository\AllAccountYandex;
 
 use BaksDev\Auth\Yandex\Entity\AccountYandex;
 use BaksDev\Auth\Yandex\Entity\Event\AccountYandexEvent;
 use BaksDev\Auth\Yandex\Entity\Event\Invariable\AccountYandexInvariable;
 use BaksDev\Auth\Yandex\Entity\Event\Modify\AccountYandexModify;
-use BaksDev\Auth\Yandex\Entity\Event\Status\AccountYandexStatus;
+use BaksDev\Auth\Yandex\Entity\Event\Status\AccountYandexActive;
 use BaksDev\Core\Doctrine\DBALQueryBuilder;
 use BaksDev\Core\Form\Search\SearchDTO;
 use BaksDev\Core\Services\Paginator\PaginatorInterface;
@@ -82,12 +82,12 @@ final class AllAccountYandexRepository implements AllAccountYandexInterface
             );
 
         $dbal
-            ->addSelect('account_yandex_status.value AS yandex_status')
+            ->addSelect('account_yandex_active.value AS yandex_status')
             ->join(
                 'account_yandex',
-                AccountYandexStatus::class,
-                'account_yandex_status',
-                'account_yandex_status.event = account_yandex.event'
+                AccountYandexActive::class,
+                'account_yandex_active',
+                'account_yandex_active.event = account_yandex.event'
             );
 
         $dbal
@@ -138,7 +138,7 @@ final class AllAccountYandexRepository implements AllAccountYandexInterface
             $dbal
                 ->createSearchQueryBuilder($this->search)
                 ->addSearchLike('account_yandex.id')
-                ->addSearchLike('account_yandex_invariable.yid')
+                ->addSearchLike('account_yandex_invariable.identifier')
                 ->addSearchLike('users_profile_info.url');
         }
 

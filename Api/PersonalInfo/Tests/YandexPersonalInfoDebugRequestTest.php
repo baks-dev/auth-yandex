@@ -19,6 +19,7 @@
  *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *  THE SOFTWARE.
+ *
  */
 
 declare(strict_types=1);
@@ -27,15 +28,17 @@ namespace BaksDev\Auth\Yandex\Api\PersonalInfo\Tests;
 
 use BaksDev\Auth\Yandex\Api\AuthToken\YandexOAuthTokenDTO;
 use BaksDev\Auth\Yandex\Api\PersonalInfo\YandexPersonalInfoRequest;
+use PHPUnit\Framework\Attributes\Group;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\Attribute\When;
 
+#[Group('auth-yandex')]
 #[When(env: 'test')]
 final class YandexPersonalInfoDebugRequestTest extends KernelTestCase
 {
     public function testToken(): void
     {
-        self::bootKernel();
+        self::assertTrue(true);
 
         /** @var YandexPersonalInfoRequest $YandexPersonalInfoRequest */
         $YandexPersonalInfoRequest = static::getContainer()->get(YandexPersonalInfoRequest::class);

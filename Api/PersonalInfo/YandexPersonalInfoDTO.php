@@ -26,6 +26,8 @@ declare(strict_types=1);
 
 namespace BaksDev\Auth\Yandex\Api\PersonalInfo;
 
+use BaksDev\Auth\Yandex\Type\YandexUser\AccountYandexUserId;
+
 /**
  * Дополнительные поля ответа зависят от прав,
  * выбранных при регистрации приложения на Яндекс OAuth и предоставленных OAuth-токеном:
@@ -57,9 +59,9 @@ final readonly class YandexPersonalInfoDTO
     /**
      * Уникальный идентификатор пользователя Яндекса
      */
-    public function getId(): string
+    public function getUserId(): AccountYandexUserId
     {
-        return $this->id;
+        return new AccountYandexUserId($this->id);
     }
 
     /**

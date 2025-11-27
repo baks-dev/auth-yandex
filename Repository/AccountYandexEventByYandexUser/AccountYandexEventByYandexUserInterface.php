@@ -19,28 +19,20 @@
  *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *  THE SOFTWARE.
+ *
  */
 
 declare(strict_types=1);
 
-namespace BaksDev\Auth\Yandex\UseCase\Public\New\Status;
+namespace BaksDev\Auth\Yandex\Repository\AccountYandexEventByYandexUser;
 
-use BaksDev\Auth\Yandex\Entity\Event\Status\AccountYandexStatusInterface;
+use BaksDev\Auth\Yandex\Entity\Event\AccountYandexEvent;
+use BaksDev\Auth\Yandex\Type\YandexUser\AccountYandexUserId;
 
-/** @see AccountYandexStatus */
-final class AccountYandexStatusDTO implements AccountYandexStatusInterface
+interface AccountYandexEventByYandexUserInterface
 {
-    /** Значение свойства */
-    private bool $value = true;
-
-    public function getValue(): bool
-    {
-        return $this->value;
-    }
-
-    public function setValue(bool $value): self
-    {
-        $this->value = $value;
-        return $this;
-    }
+    /**
+     * Метод возвращает текущее активное событие
+     */
+    public function find(AccountYandexUserId $AccountYandexUser): AccountYandexEvent|false;
 }

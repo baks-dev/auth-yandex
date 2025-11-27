@@ -64,7 +64,7 @@ final class CreateUserProfileMessage
         return new AccountYandexEventUid($this->event);
     }
 
-    /** Идентификатор предыдущего события */
+    /** Логин пользователя, полученный из Яндекс */
     public function getLogin(): string
     {
         return $this->login;

@@ -24,7 +24,7 @@
 
 namespace BaksDev\Auth\Yandex\UseCase\Admin\Edit;
 
-use BaksDev\Auth\Yandex\UseCase\Admin\Edit\Status\AccountYandexStatusForm;
+use BaksDev\Auth\Yandex\UseCase\Admin\Edit\Active\AccountYandexStatusForm;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -34,7 +34,7 @@ final class EditAccountYandexForm extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder->add('status', AccountYandexStatusForm::class, ['label' => false]);
+        $builder->add('active', AccountYandexStatusForm::class, ['label' => false]);
 
         /** Сохранить */
         $builder->add(

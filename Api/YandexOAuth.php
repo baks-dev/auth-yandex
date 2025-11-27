@@ -19,6 +19,7 @@
  *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *  THE SOFTWARE.
+ *
  */
 
 declare(strict_types=1);
@@ -26,6 +27,7 @@ declare(strict_types=1);
 namespace BaksDev\Auth\Yandex\Api;
 
 use BaksDev\Core\Cache\AppCacheInterface;
+use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\Target;
@@ -35,20 +37,31 @@ use Symfony\Contracts\Cache\CacheInterface;
 
 abstract class YandexOAuth
 {
-    private string $Authorization;
+    private ?string $Authorization = null;
 
     public function __construct(
+        #[Target('authYandexLogger')] protected LoggerInterface $logger,
         #[Autowire(env: 'APP_ENV')] private readonly string $environment,
-        #[Autowire(env: 'YANDEX_CLIENT_ID')] private readonly string $clientId,
-        #[Autowire(env: 'YANDEX_CLIENT_SECRET')] private readonly string $clientSecret,
-        #[Target('authYandexLogger')] protected readonly LoggerInterface $logger,
         private readonly AppCacheInterface $cache,
-    ) {
+        #[Autowire(env: 'YANDEX_CLIENT_ID')] private readonly ?string $clientId = null,
+        #[Autowire(env: 'YANDEX_CLIENT_SECRET')] private readonly ?string $clientSecret = null,
+    )
+    {
+        if(true === empty($this->clientId) || true === empty($this->clientSecret))
+        {
+            $this->logger->critical(
+                message: 'Не установлена переменная окружения YANDEX_CLIENT_ID или YANDEX_CLIENT_SECRET',
+                context: [self::class.':'.__LINE__,],
+            );
+
+            return;
+        }
+
         $this->Authorization = base64_encode($this->clientId.':'.$this->clientSecret);
     }
 
     /** Для перезаписи данных авторизации */
-    public function forAuthorization(string $clientId,string $clientSecret): self
+    public function forAuthorization(string $clientId, string $clientSecret): self
     {
         $this->Authorization = base64_encode($clientId.':'.$clientSecret);
         return $this;
@@ -56,6 +69,11 @@ abstract class YandexOAuth
 
     public function TokenHttpClient(): RetryableHttpClient
     {
+        if(null === $this->Authorization)
+        {
+            throw new InvalidArgumentException('Не переданы обязательные параметры запроса Authorization');
+        }
+
         return new RetryableHttpClient(
             HttpClient::create(['headers' =>
                 [

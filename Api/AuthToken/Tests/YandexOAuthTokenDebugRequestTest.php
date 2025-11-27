@@ -19,6 +19,7 @@
  *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *  THE SOFTWARE.
+ *
  */
 
 declare(strict_types=1);
@@ -26,15 +27,17 @@ declare(strict_types=1);
 namespace BaksDev\Auth\Yandex\Api\AuthToken\Tests;
 
 use BaksDev\Auth\Yandex\Api\AuthToken\YandexOAuthTokenRequest;
+use PHPUnit\Framework\Attributes\Group;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\Attribute\When;
 
+#[Group('auth-yandex')]
 #[When(env: 'test')]
 final class YandexOAuthTokenDebugRequestTest extends KernelTestCase
 {
     public function testToken(): void
     {
-        self::bootKernel();
+        self::assertTrue(true);
 
         /** @var YandexOAuthTokenRequest $YandexOAuthTokenRequest */
         $YandexOAuthTokenRequest = static::getContainer()->get(YandexOAuthTokenRequest::class);

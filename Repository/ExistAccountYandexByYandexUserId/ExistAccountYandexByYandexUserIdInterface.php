@@ -22,12 +22,14 @@
  *
  */
 
-namespace BaksDev\Auth\Yandex\Repository\DBAL\ExistAccountYandexByYid;
+namespace BaksDev\Auth\Yandex\Repository\ExistAccountYandexByYandexUserId;
+
+use BaksDev\Auth\Yandex\Type\YandexUser\AccountYandexUserId;
 
 /**
  * Проверяет существование записи с аккаунтом Яндекс по идентификатору из Invariable
  */
-interface ExistAccountYandexByYidInterface
+interface ExistAccountYandexByYandexUserIdInterface
 {
-    public function isExist(string $yid): bool;
+    public function isExist(AccountYandexUserId $AccountYandexUser): bool;
 }

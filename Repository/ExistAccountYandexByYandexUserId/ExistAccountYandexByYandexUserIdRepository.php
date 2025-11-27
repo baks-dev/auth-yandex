@@ -22,24 +22,24 @@
  *
  */
 
-namespace BaksDev\Auth\Yandex\Repository\DBAL\ExistAccountYandexByYid;
+namespace BaksDev\Auth\Yandex\Repository\ExistAccountYandexByYandexUserId;
 
 use BaksDev\Auth\Yandex\Entity\Event\AccountYandexEvent;
 use BaksDev\Auth\Yandex\Entity\Event\Invariable\AccountYandexInvariable;
+use BaksDev\Auth\Yandex\Type\YandexUser\AccountYandexUserId;
 use BaksDev\Core\Doctrine\DBALQueryBuilder;
 use Doctrine\DBAL\Types\Types;
-use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 
 /**
  * Проверяет существование записи с аккаунтом Яндекс по идентификатору из Invariable
  */
-final readonly class ExistAccountYandexByYidRepository implements ExistAccountYandexByYidInterface
+final readonly class ExistAccountYandexByYandexUserIdRepository implements ExistAccountYandexByYandexUserIdInterface
 {
     public function __construct(
         private DBALQueryBuilder $DBALQueryBuilder,
     ) {}
 
-    public function isExist(string $yid): bool
+    public function isExist(AccountYandexUserId $AccountYandexUser): bool
     {
         $dbal = $this->DBALQueryBuilder->createQueryBuilder(self::class);
 
@@ -53,11 +53,11 @@ final readonly class ExistAccountYandexByYidRepository implements ExistAccountYa
                 '
                     account_yandex_invariable.main = account_yandex_event.account AND
                     account_yandex_invariable.event = account_yandex_event.id AND 
-                    account_yandex_invariable.yid = :yid'
+                    account_yandex_invariable.identifier = :identifier'
             )->setParameter(
-                key: 'yid',
-                value: $yid,
-                type: Types::STRING
+                key: 'identifier',
+                value: $AccountYandexUser,
+                type: AccountYandexUserId::TYPE
             );
 
         return $dbal->fetchExist();

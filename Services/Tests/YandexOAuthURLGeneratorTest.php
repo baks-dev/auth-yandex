@@ -1,17 +1,17 @@
 <?php
 /*
  *  Copyright 2025.  Baks.dev <admin@baks.dev>
- *
+ *  
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
  *  in the Software without restriction, including without limitation the rights
  *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  *  copies of the Software, and to permit persons to whom the Software is furnished
  *  to do so, subject to the following conditions:
- *
+ *  
  *  The above copyright notice and this permission notice shall be included in all
  *  copies or substantial portions of the Software.
- *
+ *  
  *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  *  FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE
@@ -19,15 +19,29 @@
  *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *  THE SOFTWARE.
+ *
  */
 
-namespace BaksDev\Auth\Yandex\Entity\Event\Status;
+declare(strict_types=1);
 
-interface AccountYandexStatusInterface
+namespace BaksDev\Auth\Yandex\Services\Tests;
+
+use BaksDev\Auth\Yandex\Services\YandexOAuthURLGenerator;
+use PHPUnit\Framework\Attributes\Group;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\DependencyInjection\Attribute\When;
+
+#[Group('auth-yandex')]
+#[When(env: 'test')]
+final class YandexOAuthURLGeneratorTest extends KernelTestCase
 {
-    /**
-     * Значение свойства
-     * @see AccountYandexStatus
-     */
-    public function getValue(): bool;
+    public function testToken(): void
+    {
+        self::assertTrue(true);
+
+        /** @var YandexOAuthURLGenerator $AccountYandexAuthURLGenerator */
+        $AccountYandexAuthURLGenerator = static::getContainer()->get(YandexOAuthURLGenerator::class);
+
+        $url = $AccountYandexAuthURLGenerator->authUrl();
+    }
 }

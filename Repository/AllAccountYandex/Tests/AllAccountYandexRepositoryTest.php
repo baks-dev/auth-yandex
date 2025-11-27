@@ -22,31 +22,25 @@
  *
  */
 
-declare(strict_types=1);
+namespace BaksDev\Auth\Yandex\Repository\AllAccountYandex\Tests;
 
-namespace BaksDev\Auth\Yandex\UseCase\Public\New\Invariable;
+use BaksDev\Auth\Yandex\Repository\AllAccountYandex\AllAccountYandexInterface;
+use PHPUnit\Framework\Attributes\Group;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\DependencyInjection\Attribute\When;
 
-use BaksDev\Auth\Yandex\Entity\Event\Invariable\AccountYandexInvariableInterface;
-use BaksDev\Auth\Yandex\Type\YandexUser\AccountYandexUserId;
-use Symfony\Component\Validator\Constraints as Assert;
-
-/** @see AccountYandexInvariable */
-final class AccountYandexInvariableDTO implements AccountYandexInvariableInterface
+#[Group('auth-yandex')]
+#[When(env: 'test')]
+class AllAccountYandexRepositoryTest extends KernelTestCase
 {
-    /**
-     * Идентификатор пользователя в Yandex
-     */
-    #[Assert\NotBlank]
-    private AccountYandexUserId $identifier;
-
-    public function getIdentifier(): AccountYandexUserId
+    public function testRepository(): void
     {
-        return $this->identifier;
-    }
+        self::assertTrue(true);
 
-    public function setIdentifier(AccountYandexUserId $identifier): self
-    {
-        $this->identifier = $identifier;
-        return $this;
+        /** @var AllAccountYandexInterface $AllAccountYandexInterface */
+        $AllAccountYandexInterface = self::getContainer()->get(AllAccountYandexInterface::class);
+
+        $result = $AllAccountYandexInterface->findAll();
+
     }
 }

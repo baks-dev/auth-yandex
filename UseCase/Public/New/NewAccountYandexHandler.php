@@ -27,7 +27,7 @@ namespace BaksDev\Auth\Yandex\UseCase\Public\New;
 use BaksDev\Auth\Yandex\Entity\AccountYandex;
 use BaksDev\Auth\Yandex\Entity\Event\AccountYandexEvent;
 use BaksDev\Auth\Yandex\Messenger\AccountYandexMessage;
-use BaksDev\Auth\Yandex\Repository\DBAL\ExistAccountYandexByYid\ExistAccountYandexByYidInterface;
+use BaksDev\Auth\Yandex\Repository\ExistAccountYandexByYandexUserId\ExistAccountYandexByYandexUserIdInterface;
 use BaksDev\Core\Entity\AbstractHandler;
 use BaksDev\Core\Messenger\MessageDispatchInterface;
 use BaksDev\Core\Validator\ValidatorCollectionInterface;
@@ -42,7 +42,7 @@ final class NewAccountYandexHandler extends AbstractHandler
 {
     public function __construct(
         #[Target('authYandexLogger')] private readonly LoggerInterface $logger,
-        private readonly ExistAccountYandexByYidInterface $existAccountYandexByYidRepository,
+        private readonly ExistAccountYandexByYandexUserIdInterface $existAccountYandexByYidRepository,
 
         EntityManagerInterface $entityManager,
         MessageDispatchInterface $messageDispatch,
@@ -56,7 +56,7 @@ final class NewAccountYandexHandler extends AbstractHandler
 
     public function handle(NewAccountYandexDTO $command): string|AccountYandex
     {
-        $Yid = $command->getInvariable()->getYid();
+        $Yid = $command->getInvariable()->getIdentifier();
 
         /** Проверка аккаунта Яндекс на уникальность */
         $isExistsAccount = $this->existAccountYandexByYidRepository->isExist($Yid);

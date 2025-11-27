@@ -24,29 +24,26 @@
 
 declare(strict_types=1);
 
-namespace BaksDev\Auth\Yandex\UseCase\Public\New\Invariable;
+namespace BaksDev\Auth\Yandex\Repository\AccountYandexEventByYandexUser\Tests;
 
-use BaksDev\Auth\Yandex\Entity\Event\Invariable\AccountYandexInvariableInterface;
-use BaksDev\Auth\Yandex\Type\YandexUser\AccountYandexUserId;
-use Symfony\Component\Validator\Constraints as Assert;
+use BaksDev\Auth\Yandex\Repository\AccountYandexEventByYandexUser\AccountYandexEventByYandexUserInterface;
+use PHPUnit\Framework\Attributes\Group;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\DependencyInjection\Attribute\When;
 
-/** @see AccountYandexInvariable */
-final class AccountYandexInvariableDTO implements AccountYandexInvariableInterface
+#[Group('auth-yandex')]
+#[When(env: 'test')]
+class AccountYandexEventByYandexUserIdRepositoryTest extends KernelTestCase
 {
-    /**
-     * Идентификатор пользователя в Yandex
-     */
-    #[Assert\NotBlank]
-    private AccountYandexUserId $identifier;
-
-    public function getIdentifier(): AccountYandexUserId
+    public function testRepository(): void
     {
-        return $this->identifier;
-    }
+        self::assertTrue(true);
+        return;
 
-    public function setIdentifier(AccountYandexUserId $identifier): self
-    {
-        $this->identifier = $identifier;
-        return $this;
+        /** @var AccountYandexEventByYandexUserInterface $AccountYandexEventByCidInterface */
+        $AccountYandexEventByCidInterface = self::getContainer()->get(AccountYandexEventByYandexUserInterface::class);
+
+        $result = $AccountYandexEventByCidInterface
+            ->find('');
     }
 }

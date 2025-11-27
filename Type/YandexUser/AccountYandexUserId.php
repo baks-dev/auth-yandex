@@ -22,16 +22,23 @@
  *
  */
 
-declare(strict_types=1);
+namespace BaksDev\Auth\Yandex\Type\YandexUser;
 
-namespace BaksDev\Auth\Yandex\Repository\ORM\AccountYandexEventByCid;
-
-use BaksDev\Auth\Yandex\Entity\Event\AccountYandexEvent;
-
-interface AccountYandexEventByCidInterface
+final readonly class AccountYandexUserId
 {
-    /**
-     * Метод возвращает текущее активное событие
-     */
-    public function find(string $yid): AccountYandexEvent|false;
+    public const string TYPE = 'yandex_user';
+
+    public function __construct(
+        private string $id
+    ) {}
+
+    public function __toString(): string
+    {
+        return $this->id;
+    }
+
+    public function getValue(): string
+    {
+        return $this->id;
+    }
 }
