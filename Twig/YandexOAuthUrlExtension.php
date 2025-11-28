@@ -25,12 +25,30 @@
 namespace BaksDev\Auth\Yandex\Twig;
 
 use BaksDev\Auth\Yandex\Services\YandexOAuthURLGenerator;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Twig\Environment;
+use Twig\Error\LoaderError;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
+/**
+ * $params - Устанавливает доп. параметры запроса:
+ *
+ *  [& device_id=<идентификатор устройства>
+ *  [& device_name=<имя устройства>
+ *  [& redirect_uri=<адрес перенаправления>
+ *  [& login_hint=<имя пользователя или электронный адрес>
+ *  [& scope=<запрашиваемые необходимые права>
+ *  [& optional_scope=<запрашиваемые опциональные права>
+ *  [& force_confirm=yes
+ *  [& state=<произвольная строка>
+ *  [& code_challenge=<преобразованная верcия верификатора code_verifier>
+ *  [& code_challenge_method=<метод преобразования>
+ */
 final class YandexOAuthUrlExtension extends AbstractExtension
 {
     public function __construct(
+        #[Autowire(env: 'APP_VERSION')] private readonly string $version,
         private readonly YandexOAuthURLGenerator $yandexOAuthURLGenerator
     ) {}
 
@@ -40,13 +58,37 @@ final class YandexOAuthUrlExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('yandex_oauth_url', $this->yandexOAuthUrl(...)),
+            new TwigFunction('yandex_oauth_url', [$this, 'url'],
+                ['needs_environment' => true, 'is_safe' => ['html']]),
+
+            new TwigFunction('yandex_oauth_url_template', [$this, 'template'],
+                ['needs_environment' => true, 'is_safe' => ['html']]),
         ];
     }
 
-    public function yandexOAuthUrl(): string
+    public function url(?Environment $twig = null, ?array $params = null): string
     {
-        $url = $this->yandexOAuthURLGenerator->authUrl();
+        $url = $this->yandexOAuthURLGenerator->authUrl($params);
         return null === $url ? "" : $url;
+    }
+
+    public function template(Environment $twig, ?array $params = null): string
+    {
+        $url = $this->yandexOAuthURLGenerator->authUrl($params) ?? '';
+
+        try
+        {
+            return $twig->render('@Template/auth-yandex/twig/url/template.html.twig', [
+                'url' => $url,
+                'version' => $this->version
+            ]);
+        }
+        catch(LoaderError $loaderError)
+        {
+            return $twig->render('@auth-yandex/twig/url/template.html.twig', [
+                'url' => $url,
+                'version' => $this->version
+            ]);
+        }
     }
 }

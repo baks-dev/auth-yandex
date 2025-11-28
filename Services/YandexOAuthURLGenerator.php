@@ -39,7 +39,7 @@ final readonly class YandexOAuthURLGenerator
         #[Autowire(env: 'YANDEX_CLIENT_ID')] private ?string $clientId = null,
     ) {}
 
-    public function authUrl(): string|null
+    public function authUrl(?array $params = null): string|null
     {
         if(true === empty($this->clientId))
         {
@@ -51,6 +51,8 @@ final readonly class YandexOAuthURLGenerator
             return null;
         }
 
-        return sprintf('https://oauth.yandex.ru/authorize?response_type=code&client_id=%s', $this->clientId);
+        $options = null !== $params ? '&'.http_build_query($params, '', '&') : '';
+
+        return sprintf('https://oauth.yandex.ru/authorize?response_type=code&client_id=%s%s', $this->clientId, $options);
     }
 }
