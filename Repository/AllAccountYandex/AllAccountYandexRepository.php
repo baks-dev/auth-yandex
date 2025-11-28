@@ -103,13 +103,16 @@ final class AllAccountYandexRepository implements AllAccountYandexInterface
          * ПРОФИЛЬ ПОЛЬЗОВАТЕЛЯ
          */
 
+        /** Только активный профиль из всех */
         $dbal
             ->addSelect('users_profile_info.url AS users_profile_url')
-            ->leftJoin(
+            ->join(
                 'account_yandex',
                 UserProfileInfo::class,
                 'users_profile_info',
-                'users_profile_info.usr = account_yandex.id'
+                '
+                    users_profile_info.usr = account_yandex.id AND 
+                    users_profile_info.active IS TRUE'
             );
 
         /** Активное событие профиля */
