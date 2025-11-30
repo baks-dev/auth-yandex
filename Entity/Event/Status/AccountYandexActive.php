@@ -27,6 +27,7 @@ declare(strict_types=1);
 namespace BaksDev\Auth\Yandex\Entity\Event\Status;
 
 use BaksDev\Auth\Yandex\Entity\Event\AccountYandexEvent;
+use BaksDev\Auth\Yandex\Type\Event\AccountYandexEventUid;
 use BaksDev\Core\Entity\EntityEvent;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -63,6 +64,11 @@ class AccountYandexActive extends EntityEvent
         return $this->value;
     }
 
+    public function getEventId(): AccountYandexEventUid
+    {
+        return $this->event->getId();
+    }
+
     public function getDto($dto): mixed
     {
         if(is_string($dto) && class_exists($dto))
@@ -88,8 +94,5 @@ class AccountYandexActive extends EntityEvent
         throw new InvalidArgumentException(sprintf('Class %s interface error', $dto::class));
     }
 
-    public function isInactive(): bool
-    {
-        return false === $this->value;
-    }
+
 }

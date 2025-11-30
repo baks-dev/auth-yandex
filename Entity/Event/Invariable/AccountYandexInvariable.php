@@ -28,6 +28,7 @@ declare(strict_types=1);
 namespace BaksDev\Auth\Yandex\Entity\Event\Invariable;
 
 use BaksDev\Auth\Yandex\Entity\Event\AccountYandexEvent;
+use BaksDev\Auth\Yandex\Type\Event\AccountYandexEventUid;
 use BaksDev\Auth\Yandex\Type\YandexUser\AccountYandexUserId;
 use BaksDev\Core\Entity\EntityReadonly;
 use BaksDev\Users\User\Type\Id\UserUid;
@@ -75,6 +76,16 @@ class AccountYandexInvariable extends EntityReadonly
         return (string) $this->main;
     }
 
+    public function getEventId(): AccountYandexEventUid
+    {
+        return $this->event->getId();
+    }
+
+    public function getIdentifier(): AccountYandexUserId
+    {
+        return $this->identifier;
+    }
+
     public function getDto($dto): mixed
     {
         if($dto instanceof AccountYandexInvariableInterface)
@@ -95,10 +106,5 @@ class AccountYandexInvariable extends EntityReadonly
 
         throw new InvalidArgumentException(sprintf(
             'Class %s interface error in %s', $dto::class, self::class.':'.__LINE__));
-    }
-
-    public function getIdentifier(): AccountYandexUserId
-    {
-        return $this->identifier;
     }
 }

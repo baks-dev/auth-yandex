@@ -32,6 +32,7 @@ use BaksDev\Auth\Yandex\Api\AuthToken\YandexOAuthTokenDTO;
 use BaksDev\Auth\Yandex\Api\AuthToken\YandexOAuthTokenRequest;
 use BaksDev\Auth\Yandex\Api\PersonalInfo\YandexPersonalInfoDTO;
 use BaksDev\Auth\Yandex\Api\PersonalInfo\YandexPersonalInfoRequest;
+use BaksDev\Auth\Yandex\Controller\Public\AuthController;
 use BaksDev\Auth\Yandex\Entity\AccountYandex;
 use BaksDev\Auth\Yandex\Entity\Event\AccountYandexEvent;
 use BaksDev\Auth\Yandex\Messenger\CreateUserProfileDispatcher\CreateUserProfileMessage;
@@ -43,6 +44,7 @@ use BaksDev\Core\Cache\AppCacheInterface;
 use BaksDev\Core\Messenger\MessageDispatchInterface;
 use BaksDev\Users\User\Entity\User;
 use BaksDev\Users\User\Repository\GetUserById\GetUserByIdInterface;
+use BaksDev\Users\User\Type\Id\UserUid;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\HttpFoundation\Request;
@@ -73,7 +75,7 @@ final class YandexAuthenticator extends AbstractAuthenticator
 
     public function supports(Request $request): ?bool
     {
-        $authUrl = $this->urlGenerator->generate("auth-yandex:public.auth");
+        $authUrl = $this->urlGenerator->generate(sprintf("auth-yandex:%s", AuthController::NAME));
 
         if(
             $request->getPathInfo() === $authUrl &&
@@ -136,23 +138,50 @@ final class YandexAuthenticator extends AbstractAuthenticator
 
                 $accountYandexEvent = $this->accountYandexEventByCidRepository->find($yandexUserId);
 
-                /** Если аккаунт создан НО НЕ АКТИВНЫЙ в нашем приложении */
-                if(
-                    true === $accountYandexEvent instanceof AccountYandexEvent &&
-                    true === $accountYandexEvent->getActive()->isInactive()
-                )
-                {
-                    $this->logger->warning(
-                        message: 'Попытка аутентификации неактивного Яндекс аккаунта',
-                        context: [
-                            self::class.':'.__LINE__,
-                            $accountYandexEvent->getAccount(),
-                            'Yid' => $accountYandexEvent->getInvariable()->getIdentifier(),
-                        ]
-                    );
+                /**
+                 * Если аккаунт создан
+                 */
 
-                    return null;
+                if(true === $accountYandexEvent instanceof AccountYandexEvent)
+                {
+                    /** Аккаунт заблокирован */
+                    if(true === $accountYandexEvent->isInactive())
+                    {
+                        $this->logger->warning(
+                            message: 'Попытка аутентификации неактивного Яндекс аккаунта',
+                            context: [
+                                self::class.':'.__LINE__,
+                                $accountYandexEvent->getAccount(),
+                                'Yid' => $accountYandexEvent->getInvariable()->getIdentifier(),
+                            ],
+                        );
+
+                        return null;
+                    }
+
+                    $User = $this->userByIdRepository->get($accountYandexEvent->getAccount());
+
+                    if(false === $User instanceof User)
+                    {
+                        $this->logger->critical(
+                            message: 'Пользователь не найден',
+                            context: [self::class.':'.__LINE__,],
+                        );
+
+                        return null;
+                    }
+
+                    /** Сбрасываем кеш ролей пользователя */
+                    $cache = $this->cache->init('UserGroup');
+                    $cache->clear();
+
+                    /** Удаляем авторизацию доверенности пользователя */
+                    $Session = $request->getSession();
+                    $Session->remove('Authority');
+
+                    return $User;
                 }
+
 
                 /**
                  * Если аккаунта нет - создаем:
@@ -161,7 +190,8 @@ final class YandexAuthenticator extends AbstractAuthenticator
                  * - UserProfile
                  * - Account (при наличии email в информации о пользователе)
                  */
-                if(false === $accountYandexEvent instanceof AccountYandexEvent)
+
+                if(false === ($accountYandexEvent instanceof AccountYandexEvent))
                 {
                     $NewAccountYandexDTO = new NewAccountYandexDTO();
 
@@ -177,9 +207,9 @@ final class YandexAuthenticator extends AbstractAuthenticator
                         $this->logger->critical(
                             message: sprintf(
                                 '%s: Ошибка создания аккаунта',
-                                $AccountYandex
+                                $AccountYandex,
                             ),
-                            context: [self::class.':'.__LINE__,]
+                            context: [self::class.':'.__LINE__,],
                         );
 
                         return null;
@@ -187,13 +217,14 @@ final class YandexAuthenticator extends AbstractAuthenticator
 
                     /**
                      * Бросаем сообщение СИНХРОННО для создания профиля
+                     *
                      * @see CreateUserProfileDispatcher
                      */
                     $CreateUserProfile = $this->messageDispatch->dispatch(
                         message: new CreateUserProfileMessage(
                             $AccountYandex->getId(),
                             $AccountYandex->getEvent(),
-                            $YandexPersonalInfoDTO
+                            $YandexPersonalInfoDTO,
                         ));
 
                     /** Сообщение об ошибке создания профиля */
@@ -205,49 +236,41 @@ final class YandexAuthenticator extends AbstractAuthenticator
                         );
                     }
 
-                    if(null !== $YandexPersonalInfoDTO->getDefaultEmail())
+                    if($YandexPersonalInfoDTO->getDefaultEmail() instanceof AccountEmail)
                     {
                         /**
                          * Бросаем сообщение для создания аккаунта с email
+                         *
                          * @see CreateAccountDispatcher
                          */
                         $this->messageDispatch->dispatch(
                             message: new CreateAccountMessage(
                                 $AccountYandex->getId(),
-                                new AccountEmail($YandexPersonalInfoDTO->getDefaultEmail())
+                                $YandexPersonalInfoDTO->getDefaultEmail(),
                             ),
                             transport: 'auth-email',
                         );
                     }
+
+
+                    $User = $this->userByIdRepository->get($AccountYandex->getId());
+
+                    if(false === $User instanceof User)
+                    {
+                        $this->logger->critical(
+                            message: 'Пользователь не найден',
+                            context: [self::class.':'.__LINE__,],
+                        );
+
+                        return null;
+                    }
+
+                    return $User;
+
                 }
 
-                /** Сбрасываем кеш ролей пользователя */
-                $cache = $this->cache->init('UserGroup');
-                $cache->clear();
+                return null;
 
-                /** Удаляем авторизацию доверенности пользователя */
-                $Session = $request->getSession();
-                $Session->remove('Authority');
-
-                /** UserId нового пользователя или текущего */
-                $userUid =
-                    false === $accountYandexEvent instanceof AccountYandexEvent && true === isset($AccountYandex)
-                        ? $AccountYandex->getId()
-                        : $accountYandexEvent->getAccount();
-
-                $User = $this->userByIdRepository->get($userUid);
-
-                if(false === $User instanceof User)
-                {
-                    $this->logger->critical(
-                        message: 'Пользователь не найден',
-                        context: [self::class.':'.__LINE__,]
-                    );
-
-                    return null;
-                }
-
-                return $User;
             }));
     }
 

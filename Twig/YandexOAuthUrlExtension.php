@@ -69,7 +69,7 @@ final class YandexOAuthUrlExtension extends AbstractExtension
     public function url(?Environment $twig = null, ?array $params = null): string
     {
         $url = $this->yandexOAuthURLGenerator->authUrl($params);
-        return null === $url ? "" : $url;
+        return empty($url) ? "" : $url;
     }
 
     public function template(Environment $twig, ?array $params = null): string
@@ -80,14 +80,14 @@ final class YandexOAuthUrlExtension extends AbstractExtension
         {
             return $twig->render('@Template/auth-yandex/twig/url/template.html.twig', [
                 'url' => $url,
-                'version' => $this->version
+                'version' => $this->version,
             ]);
         }
-        catch(LoaderError $loaderError)
+        catch(LoaderError)
         {
             return $twig->render('@auth-yandex/twig/url/template.html.twig', [
                 'url' => $url,
-                'version' => $this->version
+                'version' => $this->version,
             ]);
         }
     }

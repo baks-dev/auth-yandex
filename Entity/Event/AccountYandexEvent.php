@@ -112,9 +112,19 @@ class AccountYandexEvent extends EntityEvent
         $this->account = $account instanceof AccountYandex ? $account->getId() : $account;
     }
 
-    public function getAccount(): ?UserUid
+    public function getAccount(): UserUid
     {
         return $this->account;
+    }
+
+    public function isInactive(): bool
+    {
+        return false === $this->active->getValue();
+    }
+
+    public function getInvariable(): AccountYandexInvariable
+    {
+        return $this->invariable;
     }
 
     public function getDto($dto): mixed
@@ -139,13 +149,5 @@ class AccountYandexEvent extends EntityEvent
         throw new InvalidArgumentException(sprintf('Class %s interface error', $dto::class));
     }
 
-    public function getActive(): AccountYandexActive
-    {
-        return $this->active;
-    }
 
-    public function getInvariable(): AccountYandexInvariable
-    {
-        return $this->invariable;
-    }
 }

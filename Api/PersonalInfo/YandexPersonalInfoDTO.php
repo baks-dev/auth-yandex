@@ -26,6 +26,7 @@ declare(strict_types=1);
 
 namespace BaksDev\Auth\Yandex\Api\PersonalInfo;
 
+use BaksDev\Auth\Email\Type\Email\AccountEmail;
 use BaksDev\Auth\Yandex\Type\YandexUser\AccountYandexUserId;
 
 /**
@@ -104,9 +105,9 @@ final readonly class YandexPersonalInfoDTO
     /**
      * E-mail по умолчанию, предназначенный для связи с пользователем
      */
-    public function getDefaultEmail(): ?string
+    public function getDefaultEmail(): AccountEmail|false
     {
-        return $this->default_email;
+        return $this->default_email ? new AccountEmail($this->default_email) : false;
     }
 
     /**

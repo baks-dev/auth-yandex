@@ -40,10 +40,11 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[AsController]
 final class AuthController extends AbstractController
 {
-    #[Route('/auth/yandex', name: 'public.auth')]
-    public function auth(
-        Request $request,
-    ): ?Response
+    /** @see YandexAuthenticator */
+    public const string NAME = 'public.auth';
+
+    #[Route('/auth/yandex', name: self::NAME)]
+    public function auth(): ?Response
     {
         /** Если пользователь не аутентифицирован через YandexAuthenticator */
         if(false === $this->getUsr() instanceof UserInterface)
