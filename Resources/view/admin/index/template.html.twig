@@ -1,0 +1,19 @@
+{% trans_default_domain("auth-yandex.admin") %}
+
+{% set ROLE = 'ROLE_ACCOUNT' %}
+
+{% extends Template('/admin/base.html.twig') %}
+
+{% block title %}
+    {{ 'page.index'|trans }}
+{% endblock %}
+
+{% block content %}
+
+    {{ include(_self|replace({ "template.html.twig": baks_settings.device~"/content.html.twig" })) }}
+
+{% endblock %}
+
+{% block javascript %}
+<script nonce='{{ csp_nonce() }}' async data-src="/assets/{{ version }}/js/copy.min.js" class="lazy"></script>
+{% endblock %}
