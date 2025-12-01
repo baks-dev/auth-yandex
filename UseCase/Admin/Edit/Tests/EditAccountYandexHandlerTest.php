@@ -26,12 +26,12 @@ declare(strict_types=1);
 
 namespace BaksDev\Auth\Yandex\UseCase\Admin\Edit\Tests;
 
+use BaksDev\Auth\Yandex\Controller\Admin\Tests\DeleteAdminControllerTest;
 use BaksDev\Auth\Yandex\Entity\AccountYandex;
 use BaksDev\Auth\Yandex\Entity\Event\AccountYandexEvent;
 use BaksDev\Auth\Yandex\UseCase\Admin\Edit\Active\AccountYandexActiveDTO;
 use BaksDev\Auth\Yandex\UseCase\Admin\Edit\EditAccountYandexDTO;
 use BaksDev\Auth\Yandex\UseCase\Admin\Edit\EditAccountYandexHandler;
-use BaksDev\Auth\Yandex\UseCase\Public\New\Tests\NewAccountYandexHandlerTest;
 use BaksDev\Users\User\Type\Id\UserUid;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\Attributes\DependsOnClass;
@@ -40,11 +40,10 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\Attribute\When;
 
 #[Group('auth-yandex')]
-#[Group('auth-yandex-usecase')]
 #[When(env: 'test')]
 class EditAccountYandexHandlerTest extends KernelTestCase
 {
-    #[DependsOnClass(NewAccountYandexHandlerTest::class)]
+    #[DependsOnClass(DeleteAdminControllerTest::class)]
     public function testUseCase(): void
     {
         /** @var EntityManagerInterface $em */
@@ -69,10 +68,5 @@ class EditAccountYandexHandlerTest extends KernelTestCase
         $handle = $EditAccountYandexHandler->handle($EditAccountYandexDTO);
 
         self::assertTrue(($handle instanceof AccountYandex), $handle.': Ошибка AccountYandex');
-    }
-
-    public static function tearDownAfterClass(): void
-    {
-        NewAccountYandexHandlerTest::setUpBeforeClass();
     }
 }
