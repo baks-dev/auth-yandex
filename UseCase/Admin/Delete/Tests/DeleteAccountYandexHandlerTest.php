@@ -1,17 +1,17 @@
 <?php
 /*
  *  Copyright 2025.  Baks.dev <admin@baks.dev>
- *
+ *  
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
  *  in the Software without restriction, including without limitation the rights
  *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  *  copies of the Software, and to permit persons to whom the Software is furnished
  *  to do so, subject to the following conditions:
- *
+ *  
  *  The above copyright notice and this permission notice shall be included in all
  *  copies or substantial portions of the Software.
- *
+ *  
  *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  *  FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE
@@ -24,26 +24,27 @@
 
 declare(strict_types=1);
 
-namespace BaksDev\Auth\Yandex\UseCase\Public\New\Tests;
+namespace BaksDev\Auth\Yandex\UseCase\Admin\Delete\Tests;
 
 use BaksDev\Auth\Yandex\Entity\AccountYandex;
 use BaksDev\Auth\Yandex\Entity\Event\AccountYandexEvent;
-use BaksDev\Auth\Yandex\Type\YandexUser\AccountYandexUserId;
-use BaksDev\Auth\Yandex\UseCase\Public\New\Invariable\AccountYandexInvariableDTO;
-use BaksDev\Auth\Yandex\UseCase\Public\New\NewAccountYandexDTO;
-use BaksDev\Auth\Yandex\UseCase\Public\New\NewAccountYandexHandler;
-use BaksDev\Users\User\Entity\User;
+use BaksDev\Auth\Yandex\UseCase\Admin\Delete\AccountYandexDeleteDTO;
+use BaksDev\Auth\Yandex\UseCase\Admin\Delete\AccountYandexDeleteHandler;
+use BaksDev\Auth\Yandex\UseCase\Admin\Edit\Tests\EditAccountYandexHandlerTest;
+use BaksDev\Auth\Yandex\UseCase\Public\New\Tests\NewAccountYandexHandlerTest;
 use BaksDev\Users\User\Type\Id\UserUid;
 use Doctrine\ORM\EntityManagerInterface;
+use PHPUnit\Framework\Attributes\DependsOnClass;
 use PHPUnit\Framework\Attributes\Group;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\Attribute\When;
 
 #[Group('auth-yandex')]
 #[When(env: 'test')]
-class NewAccountYandexHandlerTest extends KernelTestCase
+class DeleteAccountYandexHandlerTest extends KernelTestCase
 {
-    public static function setUpBeforeClass(): void
+    #[DependsOnClass(EditAccountYandexHandlerTest::class)]
+    public function testUseCase(): void
     {
         /** @var EntityManagerInterface $em */
         $em = self::getContainer()->get(EntityManagerInterface::class);
@@ -51,42 +52,21 @@ class NewAccountYandexHandlerTest extends KernelTestCase
         $AccountYandex = $em->getRepository(AccountYandex::class)
             ->find(UserUid::TEST);
 
-        if($AccountYandex instanceof AccountYandex)
-        {
-            $em->remove($AccountYandex);
-        }
-
         $AccountYandexEvent = $em->getRepository(AccountYandexEvent::class)
-            ->findBy(['account' => UserUid::TEST]);
+            ->findOneBy(['id' => $AccountYandex->getEvent()]);
 
-        foreach($AccountYandexEvent as $remove)
-        {
-            $em->remove($remove);
-        }
+        $AccountYandexDeleteDTO = new AccountYandexDeleteDTO();
+        $AccountYandexEvent->getDto($AccountYandexDeleteDTO);
 
-        $User = $em->getReference(User::class, new UserUid(UserUid::TEST));
-
-        if($User instanceof User)
-        {
-            $em->remove($User);
-        }
-
-        $em->flush();
-    }
-
-    public function testUseCase(): void
-    {
-        $NewAccountYandexDTO = new NewAccountYandexDTO();
-
-        /** Invariable */
-        $AccountYandexInvariableDTO = new AccountYandexInvariableDTO();
-        $AccountYandexInvariableDTO->setIdentifier(new AccountYandexUserId('bnynw6dht8d7c5m2r0qgjqba6m'));
-        $NewAccountYandexDTO->setInvariable($AccountYandexInvariableDTO);
-
-        /** @var NewAccountYandexHandler $NewAccountYandexHandler */
-        $NewAccountYandexHandler = self::getContainer()->get(NewAccountYandexHandler::class);
-        $AccountYandex = $NewAccountYandexHandler->handle($NewAccountYandexDTO);
+        /** @var AccountYandexDeleteHandler $AccountYandexDeleteHandler */
+        $AccountYandexDeleteHandler = self::getContainer()->get(AccountYandexDeleteHandler::class);
+        $AccountYandex = $AccountYandexDeleteHandler->handle($AccountYandexDeleteDTO);
 
         self::assertTrue(($AccountYandex instanceof AccountYandex), $AccountYandex.': Ошибка AccountYandex');
+    }
+
+    public static function tearDownAfterClass(): void
+    {
+        NewAccountYandexHandlerTest::setUpBeforeClass();
     }
 }

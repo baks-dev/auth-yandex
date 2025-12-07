@@ -15,9 +15,8 @@
         <div class="modal-body">
 
             <div class="d-flex justify-content-around pb-3 radio-buttons clearfix w-50" data-buttons="true"
-                    {#                 style='clear: both' #}
-            >
-                <label class="btn p-3 border-dotted rounded-3 w-100 {{ form.active.vars.data ? 'active' }}">
+                 style='clear: both'>
+                <label class="btn p-3 border-dotted rounded-3 w-100 {{ form.active.value.vars.data ? 'active' }}">
                     <div class="d-flex align-items-center">
                         <div class="flex-grow-1">
                             <span class="h5">
@@ -34,9 +33,6 @@
                 </label>
             </div>
 
-            {#            <div class="w-50"> #}
-            {#                {{ form_row(form.active, {label: 'Статус аккаутна'}) }} #}
-            {#            </div> #}
         </div>
 
         <div class="modal-footer ">

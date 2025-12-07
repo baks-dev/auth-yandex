@@ -14,6 +14,13 @@ $ composer require baks-dev/auth-yandex
 
 ## Дополнительно
 
+Переменные окружения:
+
+```
+YANDEX_CLIENT_ID=<you_id>
+YANDEX_CLIENT_SECRET=<you_secret>
+```
+
 Установка конфигурации и файловых ресурсов:
 
 ``` bash
