@@ -29,6 +29,7 @@ namespace BaksDev\Auth\Yandex\Api\PersonalInfo;
 use BaksDev\Auth\Yandex\Api\AuthToken\YandexOAuthTokenDTO;
 use BaksDev\Auth\Yandex\Api\YandexLogin;
 use DateInterval;
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 use Symfony\Contracts\Cache\ItemInterface;
 
 /**
