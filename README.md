@@ -12,14 +12,20 @@
 $ composer require baks-dev/auth-yandex
 ```
 
+## Настройка
+
+Создать приложение Яндекс ID для сайта:
+
+- Бизнес -> Яндекс ID для сайта
+
+Указываем переменные окружения:
+
+```
+YANDEX_CLIENT_ID=<ClientID>
+YANDEX_CLIENT_SECRET=<ClientSecret>
+```
+
 ## Дополнительно
-
-Переменные окружения:
-
-```
-YANDEX_CLIENT_ID=<you_id>
-YANDEX_CLIENT_SECRET=<you_secret>
-```
 
 Установка конфигурации и файловых ресурсов:
 
