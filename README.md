@@ -18,7 +18,13 @@ $ composer require baks-dev/auth-yandex
 
 - Бизнес -> Яндекс ID для сайта
 
-Указываем переменные окружения:
+Указать путь для редиректа :
+
+```
+https://<DOMAIN>/auth/yandex
+```
+
+Указываем переменные окружения .env :
 
 ```
 YANDEX_CLIENT_ID=<ClientID>
