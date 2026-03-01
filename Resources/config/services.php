@@ -30,7 +30,8 @@ return static function(ContainerConfigurator $configurator) {
     $services = $configurator->services()
         ->defaults()
         ->autowire()
-        ->autoconfigure();
+        ->autoconfigure()
+        ->public();
 
     $NAMESPACE = BaksDevAuthYandexBundle::NAMESPACE;
     $PATH = BaksDevAuthYandexBundle::PATH;
