@@ -43,6 +43,11 @@ use Symfony\Component\DependencyInjection\Attribute\When;
 #[When(env: 'test')]
 class DeleteAccountYandexHandlerTest extends KernelTestCase
 {
+    public static function tearDownAfterClass(): void
+    {
+        NewAccountYandexHandlerTest::setUpBeforeClass();
+    }
+
     #[DependsOnClass(EditAccountYandexHandlerTest::class)]
     public function testUseCase(): void
     {
@@ -63,10 +68,5 @@ class DeleteAccountYandexHandlerTest extends KernelTestCase
         $AccountYandex = $AccountYandexDeleteHandler->handle($AccountYandexDeleteDTO);
 
         self::assertTrue(($AccountYandex instanceof AccountYandex), $AccountYandex.': Ошибка AccountYandex');
-    }
-
-    public static function tearDownAfterClass(): void
-    {
-        NewAccountYandexHandlerTest::setUpBeforeClass();
     }
 }

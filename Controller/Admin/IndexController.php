@@ -52,7 +52,7 @@ final class IndexController extends AbstractController
             ->createForm(
                 type: SearchForm::class,
                 data: $search = new SearchDTO(),
-                options: ['action' => $this->generateUrl('auth-yandex:admin.index')]
+                options: ['action' => $this->generateUrl('auth-yandex:admin.index')],
             )
             ->handleRequest($request);
 
@@ -65,7 +65,7 @@ final class IndexController extends AbstractController
             [
                 'query' => $AccountYandex,
                 'search' => $searchForm->createView(),
-            ]
+            ],
         );
     }
 }

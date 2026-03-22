@@ -22,7 +22,7 @@
  */
 executeFunc(function authYandex()
 {
-    const authLink = document.getElementById('yandex-auth-link');
+    const authLink = document.getElementById("yandex-auth-link");
 
     if(typeof authLink === "undefined" || authLink === null)
     {
@@ -32,9 +32,9 @@ executeFunc(function authYandex()
     const yandexUrl = new URL(authLink.href);
 
     /** Если ссылка не отрисовалась */
-    if(yandexUrl.origin + yandexUrl.pathname !== 'https://oauth.yandex.ru/authorize')
+    if(yandexUrl.origin + yandexUrl.pathname !== "https://oauth.yandex.ru/authorize")
     {
-        authLink.addEventListener('click', function(event)
+        authLink.addEventListener("click", function(event)
         {
             event.preventDefault(); // отменяем обычный переход
 
@@ -48,7 +48,7 @@ executeFunc(function authYandex()
         return true;
     }
 
-    authLink.addEventListener('click', function(event)
+    authLink.addEventListener("click", function(event)
     {
         /** Закрываем модальное окно */
         const modal = document.getElementById("modal");
@@ -70,23 +70,24 @@ executeFunc(function authYandex()
 
         const features = `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes`;
 
-        const authWindow = window.open(authUrl, 'authYandex', features);
+        const authWindow = window.open(authUrl, "authYandex", features);
 
         if(authWindow)
         {
             authWindow.focus();
-        } else
+        }
+        else
         {
-            alert('Не удалось открыть окно авторизации. Разрешите всплывающие окна.');
+            alert("Не удалось открыть окно авторизации. Разрешите всплывающие окна.");
         }
     });
 
-    window.addEventListener('message', function(event)
+    window.addEventListener("message", function(event)
     {
         /**
          * Сообщение от js скрипта со страницы /auth/yandex
          */
-        if(event.data.type === 'YANDEX_AUTH')
+        if(event.data.type === "YANDEX_AUTH")
         {
             /** Редирект на главную */
             window.location.replace(window.location.origin);

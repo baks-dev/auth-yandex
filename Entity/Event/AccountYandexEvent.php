@@ -93,6 +93,14 @@ class AccountYandexEvent extends EntityEvent
         return (string) $this->id;
     }
 
+    /**
+     * Идентификатор UserUid
+     */
+    public function setMain(AccountYandex|UserUid $account): void
+    {
+        $this->account = $account instanceof AccountYandex ? $account->getId() : $account;
+    }
+
     public function getId(): AccountYandexEventUid
     {
         return $this->id;
@@ -102,14 +110,6 @@ class AccountYandexEvent extends EntityEvent
     {
         $this->id = $id;
         return $this;
-    }
-
-    /**
-     * Идентификатор UserUid
-     */
-    public function setMain(AccountYandex|UserUid $account): void
-    {
-        $this->account = $account instanceof AccountYandex ? $account->getId() : $account;
     }
 
     public function getAccount(): UserUid

@@ -48,7 +48,7 @@ final class EditAccountYandexHandler extends AbstractHandler
         /** Отправляем сообщение в шину */
         $this->messageDispatch->dispatch(
             message: new AccountYandexMessage($this->main->getId(), $this->main->getEvent()),
-            transport: 'auth-yandex'
+            transport: 'auth-yandex',
         );
 
         return $this->main;

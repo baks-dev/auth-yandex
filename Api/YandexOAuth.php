@@ -79,7 +79,7 @@ abstract class YandexOAuth
                 [
                     'Content-Type' => 'application/x-www-form-urlencoded',
                     'Authorization' => 'Basic '.$this->Authorization,
-                ]
+                ],
             ])
                 ->withOptions([
                     'base_uri' => 'https://oauth.yandex.ru/',

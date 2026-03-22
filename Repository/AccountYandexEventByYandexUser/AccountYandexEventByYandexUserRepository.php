@@ -52,7 +52,7 @@ final readonly class AccountYandexEventByYandexUserRepository implements Account
             ->setParameter(
                 key: 'identifier',
                 value: $AccountYandexUser,
-                type: AccountYandexUserId::TYPE
+                type: AccountYandexUserId::TYPE,
             );
 
         $orm
@@ -60,7 +60,7 @@ final readonly class AccountYandexEventByYandexUserRepository implements Account
                 AccountYandex::class,
                 'main',
                 'WITH',
-                'main.id = invariable.main'
+                'main.id = invariable.main',
             );
 
         $orm
@@ -68,7 +68,7 @@ final readonly class AccountYandexEventByYandexUserRepository implements Account
                 AccountYandexEvent::class,
                 'event',
                 'WITH',
-                'event.id = invariable.event'
+                'event.id = invariable.event',
             );
 
         return $orm->getOneOrNullResult() ?: false;

@@ -28,6 +28,7 @@ interface AccountYandexActiveInterface
 {
     /**
      * Значение свойства
+     *
      * @see AccountYandexActive
      */
     public function getValue(): bool;

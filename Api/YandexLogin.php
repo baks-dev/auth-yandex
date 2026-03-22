@@ -44,8 +44,7 @@ abstract class YandexLogin
         #[Autowire(env: 'APP_ENV')] private readonly string $environment,
         #[Target('authYandexLogger')] protected LoggerInterface $logger,
         private readonly AppCacheInterface $cache,
-    ) {
-    }
+    ) {}
 
     /** Yandex OAuth token для запроса */
     public function token(YandexOAuthTokenDTO $token): self
@@ -65,7 +64,7 @@ abstract class YandexLogin
             HttpClient::create(['headers' =>
                 [
                     'Authorization' => 'OAuth '.$this->token->getAccessToken(),
-                ]
+                ],
             ])
                 ->withOptions([
                     'base_uri' => 'https://login.yandex.ru/',

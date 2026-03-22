@@ -73,7 +73,7 @@ final class EditController extends AbstractController
                 'page.edit',
                 $handle instanceof AccountYandex ? 'success.edit' : 'danger.edit',
                 'auth-yandex.admin',
-                $handle
+                $handle,
             );
 
             return $this->redirectToRoute('auth-yandex:admin.index');

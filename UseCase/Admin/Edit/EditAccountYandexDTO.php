@@ -32,6 +32,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Объект для РЕДАКТИРОВАНИЯ аккаунта Yandex
+ *
  * @see AccountYandexEvent
  */
 final class EditAccountYandexDTO implements AccountYandexEventInterface
@@ -75,6 +76,11 @@ final class EditAccountYandexDTO implements AccountYandexEventInterface
         return $this->account;
     }
 
+    public function getActive(): AccountYandexActiveDTO
+    {
+        return $this->active;
+    }
+
     /**
      * Статус аккаунта
      */
@@ -82,11 +88,6 @@ final class EditAccountYandexDTO implements AccountYandexEventInterface
     {
         $this->active = $active;
         return $this;
-    }
-
-    public function getActive(): AccountYandexActiveDTO
-    {
-        return $this->active;
     }
 
 }

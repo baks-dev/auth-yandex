@@ -56,7 +56,7 @@ final class DeleteController extends AbstractController
         $form =
             $this->createForm(AccountYandexDeleteForm::class, $AccountYandexDeleteDTO, [
                 'action' => $this->generateUrl('auth-yandex:admin.delete',
-                    ['id' => $AccountYandexDeleteDTO->getEvent()]
+                    ['id' => $AccountYandexDeleteDTO->getEvent()],
                 ),
             ])->handleRequest($request);
 
@@ -71,7 +71,7 @@ final class DeleteController extends AbstractController
                 'page.delete',
                 $handle instanceof AccountYandex ? 'success.delete' : 'danger.delete',
                 'auth-yandex.admin',
-                $handle
+                $handle,
             );
 
             return $this->redirectToRoute('auth-yandex:admin.index');

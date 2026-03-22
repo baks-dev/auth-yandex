@@ -68,7 +68,7 @@ final class AllAccountYandexRepository implements AllAccountYandexInterface
                 'account_yandex',
                 AccountYandexEvent::class,
                 'account_yandex_event',
-                'account_yandex_event.id = account_yandex.event'
+                'account_yandex_event.id = account_yandex.event',
             );
 
         $dbal
@@ -78,7 +78,7 @@ final class AllAccountYandexRepository implements AllAccountYandexInterface
                 'account_yandex_invariable',
                 '
                     account_yandex_invariable.main = account_yandex.id AND
-                    account_yandex_invariable.event = account_yandex.event'
+                    account_yandex_invariable.event = account_yandex.event',
             );
 
         $dbal
@@ -87,7 +87,7 @@ final class AllAccountYandexRepository implements AllAccountYandexInterface
                 'account_yandex',
                 AccountYandexActive::class,
                 'account_yandex_active',
-                'account_yandex_active.event = account_yandex.event'
+                'account_yandex_active.event = account_yandex.event',
             );
 
         $dbal
@@ -96,7 +96,7 @@ final class AllAccountYandexRepository implements AllAccountYandexInterface
                 'account_yandex',
                 AccountYandexModify::class,
                 'account_yandex_modify',
-                'account_yandex_modify.event = account_yandex.event'
+                'account_yandex_modify.event = account_yandex.event',
             );
 
         /**
@@ -112,7 +112,7 @@ final class AllAccountYandexRepository implements AllAccountYandexInterface
                 'users_profile_info',
                 '
                     users_profile_info.usr = account_yandex.id AND 
-                    users_profile_info.active IS TRUE'
+                    users_profile_info.active IS TRUE',
             );
 
         /** Активное событие профиля */
@@ -122,7 +122,7 @@ final class AllAccountYandexRepository implements AllAccountYandexInterface
             'users_profile',
             '
                 users_profile.id = users_profile_info.profile AND
-                users_profile.event = users_profile_info.event'
+                users_profile.event = users_profile_info.event',
         );
 
         /** Personal */

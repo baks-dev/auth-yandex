@@ -40,7 +40,7 @@ final class EditAccountYandexForm extends AbstractType
         $builder->add(
             'account_yandex_edit',
             SubmitType::class,
-            ['label' => 'Save', 'label_html' => true, 'attr' => ['class' => 'btn-primary']]
+            ['label' => 'Save', 'label_html' => true, 'attr' => ['class' => 'btn-primary']],
         );
     }
 
@@ -51,7 +51,7 @@ final class EditAccountYandexForm extends AbstractType
                 'data_class' => EditAccountYandexDTO::class,
                 'method' => 'POST',
                 'attr' => ['class' => 'w-100'],
-            ]
+            ],
         );
     }
 }

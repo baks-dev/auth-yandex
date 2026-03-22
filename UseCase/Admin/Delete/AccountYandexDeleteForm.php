@@ -38,7 +38,7 @@ final class AccountYandexDeleteForm extends AbstractType
         $builder->add(
             'account_yandex_delete',
             SubmitType::class,
-            ['label' => 'Save', 'label_html' => true, 'attr' => ['class' => 'btn-danger']]
+            ['label' => 'Save', 'label_html' => true, 'attr' => ['class' => 'btn-danger']],
         );
     }
 

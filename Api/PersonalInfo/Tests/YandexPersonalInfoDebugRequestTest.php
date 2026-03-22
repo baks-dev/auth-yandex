@@ -47,7 +47,7 @@ final class YandexPersonalInfoDebugRequestTest extends KernelTestCase
             '',
             0,
             '',
-            ''
+            '',
         );
 
         $YandexPersonalInfoDTO = $YandexPersonalInfoRequest->get($YandexAuthTokenDTO);

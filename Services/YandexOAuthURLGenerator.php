@@ -30,6 +30,7 @@ use Symfony\Component\DependencyInjection\Attribute\Target;
 
 /**
  * Генерирует ссылку для перехода на страницу Яндекс OAuth.
+ *
  * @see https://yandex.ru/dev/id/doc/ru/codes/code-url?tabs=defaultTabsGroup-jrbbntfw_%25d0%2597%25d0%25b0%25d0%25bf%25d1%2580%25d0%25be%25d1%2581%2520%25d0%25b2%25d1%258b%25d0%25bf%25d0%25be%25d0%25bb%25d0%25bd%25d0%25b5%25d0%25bd%2520%25d1%2583%25d1%2581%25d0%25bf%25d0%25b5%25d1%2588%25d0%25bd%25d0%25be%2CdefaultTabsGroup-mq43soab_%25d0%2597%25d0%25b0%25d0%25bf%25d1%2580%25d0%25be%25d1%2581%2520%25d0%25b2%25d1%258b%25d0%25bf%25d0%25be%25d0%25bb%25d0%25bd%25d0%25b5%25d0%25bd%2520%25d1%2583%25d1%2581%25d0%25bf%25d0%25b5%25d1%2588%25d0%25bd%25d0%25be#token
  */
 final readonly class YandexOAuthURLGenerator

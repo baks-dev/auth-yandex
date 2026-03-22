@@ -30,6 +30,6 @@ return static function(TwigConfig $twig) {
 
     $twig->path(
         BaksDevAuthYandexBundle::PATH.implode(DIRECTORY_SEPARATOR, ['Resources', 'view', '']),
-        'auth-yandex'
+        'auth-yandex',
     );
 };

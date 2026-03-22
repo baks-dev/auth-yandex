@@ -52,6 +52,12 @@ final class CreateUserProfileMessage
         $this->login = $yandexPersonalInfoDTO->getLogin();
     }
 
+    /** Логин пользователя, полученный из Яндекс */
+    public function getLogin(): string
+    {
+        return $this->login;
+    }
+
     /** Идентификатор */
     public function getId(): UserUid
     {
@@ -62,11 +68,5 @@ final class CreateUserProfileMessage
     public function getEvent(): AccountYandexEventUid
     {
         return new AccountYandexEventUid($this->event);
-    }
-
-    /** Логин пользователя, полученный из Яндекс */
-    public function getLogin(): string
-    {
-        return $this->login;
     }
 }

@@ -71,9 +71,9 @@ final readonly class CreateUserProfileDispatcher
             $this->logger->critical(
                 message: sprintf(
                     'auth-yandex: %s: Ошибка при создании профиля пользователя',
-                    $UserProfile
+                    $UserProfile,
                 ),
-                context: [self::class.':'.__LINE__]
+                context: [self::class.':'.__LINE__],
             );
 
             return false;

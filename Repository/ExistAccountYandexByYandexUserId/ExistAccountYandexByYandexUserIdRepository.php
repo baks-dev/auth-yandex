@@ -53,11 +53,11 @@ final readonly class ExistAccountYandexByYandexUserIdRepository implements Exist
                 '
                     account_yandex_invariable.main = account_yandex_event.account AND
                     account_yandex_invariable.event = account_yandex_event.id AND 
-                    account_yandex_invariable.identifier = :identifier'
+                    account_yandex_invariable.identifier = :identifier',
             )->setParameter(
                 key: 'identifier',
                 value: $AccountYandexUser,
-                type: AccountYandexUserId::TYPE
+                type: AccountYandexUserId::TYPE,
             );
 
         return $dbal->fetchExist();

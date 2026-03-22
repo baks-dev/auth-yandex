@@ -34,6 +34,7 @@ use Symfony\Contracts\Cache\ItemInterface;
 
 /**
  * Обмен токена на информацию о пользователе
+ *
  * @see https://yandex.ru/dev/id/doc/ru/user-information
  */
 final class YandexPersonalInfoRequest extends YandexLogin

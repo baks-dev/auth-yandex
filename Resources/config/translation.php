@@ -31,6 +31,6 @@ return static function(FrameworkConfig $config) {
 
     $config->translator()
         ->paths([BaksDevAuthYandexBundle::PATH.implode(
-                DIRECTORY_SEPARATOR, ['Resources', 'translations', '']
+                DIRECTORY_SEPARATOR, ['Resources', 'translations', ''],
             )]);
 };
