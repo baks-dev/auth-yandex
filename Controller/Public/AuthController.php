@@ -25,6 +25,7 @@
 namespace BaksDev\Auth\Yandex\Controller\Public;
 
 use BaksDev\Core\Controller\AbstractController;
+use BaksDev\Users\User\Entity\User;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -47,7 +48,7 @@ final class AuthController extends AbstractController
     public function auth(): ?Response
     {
         /** Если пользователь не аутентифицирован через YandexAuthenticator */
-        if(false === $this->getUsr() instanceof UserInterface)
+        if(false === ($this->getUsr() instanceof User))
         {
             $this->addFlash
             (
